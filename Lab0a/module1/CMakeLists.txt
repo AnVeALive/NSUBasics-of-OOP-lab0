@@ -1,0 +1,1 @@
+add_library(module1 module1.cpp module1.h)

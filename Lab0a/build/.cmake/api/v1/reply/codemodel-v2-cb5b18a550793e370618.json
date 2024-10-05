@@ -1,0 +1,113 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2
+					],
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.22"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"build" : "module1",
+					"jsonFile" : "directory-module1-Debug-ad76a92f6742374b31ec.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.22"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "module1",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"build" : "module2",
+					"jsonFile" : "directory-module2-Debug-91e7a4a187d1040224ba.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.22"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "module2",
+					"targetIndexes" : 
+					[
+						2
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						2
+					],
+					"name" : "lab0",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "lab0::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-lab0-Debug-2eefc91cf293da65c762.json",
+					"name" : "lab0",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "module1::@7b43c4801f818007b112",
+					"jsonFile" : "target-module1-Debug-41d37d850a9549a0a7e5.json",
+					"name" : "module1",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "module2::@bf6db2ce7a83d35d5172",
+					"jsonFile" : "target-module2-Debug-f58b7c23ba922348fcf3.json",
+					"name" : "module2",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/anvea/Documents/NSU/\u041f\u0440\u0435\u0434\u043c\u0435\u0442\u044b/\u041e\u0441\u043d\u043e\u0432\u044b \u041e\u041e\u041f/lab0/build",
+		"source" : "/Users/anvea/Documents/NSU/\u041f\u0440\u0435\u0434\u043c\u0435\u0442\u044b/\u041e\u0441\u043d\u043e\u0432\u044b \u041e\u041e\u041f/lab0"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}

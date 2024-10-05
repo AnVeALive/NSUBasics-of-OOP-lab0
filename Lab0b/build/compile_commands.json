@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/Users/anvea/Documents/NSU/Subjects/Basics of OOP/OOP lab 0b/build",
+  "command": "/Library/Developer/CommandLineTools/usr/bin/c++   -g -std=gnu++11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.0.sdk -o CMakeFiles/wordStat.dir/main.cpp.o -c \"/Users/anvea/Documents/NSU/Subjects/Basics of OOP/OOP lab 0b/main.cpp\"",
+  "file": "/Users/anvea/Documents/NSU/Subjects/Basics of OOP/OOP lab 0b/main.cpp",
+  "output": "CMakeFiles/wordStat.dir/main.cpp.o"
+}
+]

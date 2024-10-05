@@ -1,0 +1,9 @@
+/Users/anvea/Documents/NSU/Предметы/Основы ООП/lab0/build/CMakeFiles/lab0.dir
+/Users/anvea/Documents/NSU/Предметы/Основы ООП/lab0/build/CMakeFiles/edit_cache.dir
+/Users/anvea/Documents/NSU/Предметы/Основы ООП/lab0/build/CMakeFiles/rebuild_cache.dir
+/Users/anvea/Documents/NSU/Предметы/Основы ООП/lab0/build/module1/CMakeFiles/module1.dir
+/Users/anvea/Documents/NSU/Предметы/Основы ООП/lab0/build/module1/CMakeFiles/edit_cache.dir
+/Users/anvea/Documents/NSU/Предметы/Основы ООП/lab0/build/module1/CMakeFiles/rebuild_cache.dir
+/Users/anvea/Documents/NSU/Предметы/Основы ООП/lab0/build/module2/CMakeFiles/module2.dir
+/Users/anvea/Documents/NSU/Предметы/Основы ООП/lab0/build/module2/CMakeFiles/edit_cache.dir
+/Users/anvea/Documents/NSU/Предметы/Основы ООП/lab0/build/module2/CMakeFiles/rebuild_cache.dir
