@@ -1,0 +1,21 @@
+# ninja log v6
+0	41	1728818624480072680	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-mkdir	deb1b5ce60971fd8
+0	41	1728818624480072680	/Users/anvea/Documents/NSU/OOP/Lab1/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-mkdir	deb1b5ce60971fd8
+41	3682	1728818628121857734	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-download	c9ecc80df522adea
+41	3682	1728818628121857734	/Users/anvea/Documents/NSU/OOP/Lab1/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-download	c9ecc80df522adea
+3682	3705	1728818628144528130	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-update	8b893d72d87f94a4
+3682	3705	1728818628144528130	/Users/anvea/Documents/NSU/OOP/Lab1/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-update	8b893d72d87f94a4
+3705	3727	1728818628166100597	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-patch	a402991b90b3f7f8
+3705	3727	1728818628166100597	/Users/anvea/Documents/NSU/OOP/Lab1/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-patch	a402991b90b3f7f8
+3727	3750	1728818628189337395	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-configure	eed2d0b66e7ea78a
+3727	3750	1728818628189337395	/Users/anvea/Documents/NSU/OOP/Lab1/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-configure	eed2d0b66e7ea78a
+3750	3770	1728818628209658937	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-build	1cbb32f53582d9df
+3750	3770	1728818628209658937	/Users/anvea/Documents/NSU/OOP/Lab1/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-build	1cbb32f53582d9df
+3770	3791	1728818628230299429	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-install	5f77ad24a0d19522
+3770	3791	1728818628230299429	/Users/anvea/Documents/NSU/OOP/Lab1/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-install	5f77ad24a0d19522
+3791	3810	1728818628250075902	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-test	57f2bffe3bb975c1
+3791	3810	1728818628250075902	/Users/anvea/Documents/NSU/OOP/Lab1/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-test	57f2bffe3bb975c1
+3811	3839	1728818628278243944	CMakeFiles/googletest-populate-complete	d7b344dbd0bc32f4
+3811	3839	1728818628278243944	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-done	d7b344dbd0bc32f4
+3811	3839	1728818628278243944	/Users/anvea/Documents/NSU/OOP/Lab1/cmake-build-debug/_deps/googletest-subbuild/CMakeFiles/googletest-populate-complete	d7b344dbd0bc32f4
+3811	3839	1728818628278243944	/Users/anvea/Documents/NSU/OOP/Lab1/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-done	d7b344dbd0bc32f4
