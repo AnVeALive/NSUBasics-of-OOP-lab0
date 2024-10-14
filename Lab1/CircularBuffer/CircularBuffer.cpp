@@ -13,8 +13,8 @@ CircularBuffer::~CircularBuffer()
 CircularBuffer::CircularBuffer(const CircularBuffer &cb)
 {
     buffer = new value_type[cb.capacity]{};
-    for (int i = 0; i < cb.capacity; i++) {
-        buffer[i] = cb.buffer[i];
+    for (int i = 0; i < cb.size; i++) {
+        buffer[(i + cb.head) % cb.capacity] = cb.buffer[(i + cb.head) % cb.capacity];
     }
     head = cb.head;
     tail = cb.tail;
@@ -80,8 +80,8 @@ CircularBuffer &CircularBuffer::operator=(const CircularBuffer &cb)
     delete[] buffer;
     value_type *new_buffer = new value_type[cb.capacity]{};
 
-    for (int i = cb.head; i < cb.head + cb.size; i++) {
-        new_buffer[i % cb.capacity] = cb.buffer[i % cb.capacity];
+    for (int i = 0; i < cb.size; i++) {
+        new_buffer[(i + cb.head) % cb.capacity] = cb.buffer[(i + cb.head) % cb.capacity];
     }
     this->buffer = new_buffer;
 
@@ -136,10 +136,14 @@ const value_type &CircularBuffer::Back() const {
 
 //Seters
 void CircularBuffer::SetHead(int ind) {
+    if (ind < 0 || ind >= capacity)
+        throw std::out_of_range("Head cannot be there.");
     head = ind;
 }
 
 void CircularBuffer::SetTail(int ind) {
+    if (ind < 0 || ind >= capacity)
+        throw std::out_of_range("Tail cannot be there.");
     tail = ind;
 }
 
@@ -149,30 +153,23 @@ void CircularBuffer::SetCapacity(int new_capacity)
     {
         value_type *new_buffer = new value_type[new_capacity]{};
 
-        if (new_capacity < capacity)
-        {
-            for (int i = head; i < head + new_capacity; i++) {
-                new_buffer[i % new_capacity] = buffer[i % capacity];
-            }
-            tail = head;
-            
-            capacity = new_capacity;
+        if (size > new_capacity)
             size = new_capacity;
+        for (int i = 0; i < size; i++) {
+            new_buffer[(head + i) % new_capacity] = buffer[(head + i) % capacity];
         }
-        else
-        {
-            for (int i = head; i < head + size; i++) {
-                new_buffer[i % new_capacity] = buffer[i % capacity];
-            }
-            tail = (head + size) % new_capacity;
-            capacity = new_capacity;
-        }
+        head = head % new_capacity;
+        tail = (head + size) % new_capacity;
+        capacity = new_capacity;
+
         delete[] buffer;
         this->buffer = new_buffer;
     }
 }
 
 void CircularBuffer::SetSize(int new_size) {
+    if (new_size > capacity)
+        throw std::out_of_range("Size cannot be larger than capacity.");
     size = new_size;
 }
 
@@ -226,6 +223,7 @@ void CircularBuffer::PopBack()
 
     tail = (tail - 1 + capacity) % capacity;
     buffer[tail] = value_type();
+    size--;
 }
 
 void CircularBuffer::PopFront()
@@ -235,6 +233,7 @@ void CircularBuffer::PopFront()
     
     buffer[head] = value_type();
     head = (head + 1) % capacity;
+    size--;
 }
 
 
@@ -277,32 +276,23 @@ void CircularBuffer::Resize(int new_size, const value_type &item)
 {
     if (new_size != size)
     {
-        if (new_size < size)
+        if (new_size <= size)
         {
             for (int i = 0; i < size - new_size; i++) {
                 buffer[(head + new_size + i) % capacity] = value_type();
             }
             tail = (tail - (size - new_size) + capacity) % capacity;
-            size = new_size;
         }
         else
         {
-            if (new_size <= capacity)
-            {
-                for (int i = 0; i < new_size - size; i++) {
-                    PushBack(item);
-                }
-            }
-            else
-            {
+            if (new_size > capacity)
                 SetCapacity(new_size);
-                for (int i = 0; i < new_size - size; i++) {
-                    buffer[(tail + i) % capacity] = item;
-                }
-                tail = (tail + (new_size - size)) % capacity;
-                size += new_size - size;
+            for (int i = 0; i < new_size - size; i++) {
+                buffer[(tail + i) % capacity] = item;
             }
+            tail = (tail + (new_size - size)) % capacity;
         }
+        size = new_size;
     }
 }
 
