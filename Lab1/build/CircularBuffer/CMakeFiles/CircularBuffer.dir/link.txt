@@ -1,2 +1,0 @@
-/Library/Developer/CommandLineTools/usr/bin/ar qc libCircularBuffer.a CMakeFiles/CircularBuffer.dir/CircularBuffer.cpp.o
-/Library/Developer/CommandLineTools/usr/bin/ranlib libCircularBuffer.a

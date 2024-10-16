@@ -1,3 +1,0 @@
-/Users/anvea/Documents/NSU/Subjects/Basics of OOP/OOP lab 0b/build/CMakeFiles/wordStat.dir
-/Users/anvea/Documents/NSU/Subjects/Basics of OOP/OOP lab 0b/build/CMakeFiles/edit_cache.dir
-/Users/anvea/Documents/NSU/Subjects/Basics of OOP/OOP lab 0b/build/CMakeFiles/rebuild_cache.dir
