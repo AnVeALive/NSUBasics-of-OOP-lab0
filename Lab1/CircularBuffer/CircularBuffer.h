@@ -29,8 +29,6 @@ public:
 
 
     // Geters
-    int GetHead() const;
-    int GetTail() const;
     int GetCapacity() const;
     int GetSize() const;
     int GetReserve() const;
@@ -42,10 +40,7 @@ public:
 
 
     //Seters
-    void SetHead(int ind);
-    void SetTail(int ind);
     void SetCapacity(int new_capacity);
-    void SetSize(int new_size);
 
 
     // Checkers

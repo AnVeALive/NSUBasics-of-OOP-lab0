@@ -13,10 +13,8 @@ TEST(CircularBuffer, creating_with_cb)
     for (int i = 0; i < cap; i++) {
         ASSERT_EQ(cb1[i], cb2[i]);
     }
-    ASSERT_EQ(cb1.GetHead(), cb2.GetHead());
-    ASSERT_EQ(cb1.GetHead(), 0);
-    ASSERT_EQ(cb1.GetTail(), cb2.GetTail());
-    ASSERT_EQ(cb1.GetTail(), 0);
+    ASSERT_EQ(cb1.Front(), cb2.Front());
+    ASSERT_EQ(cb1.Back(), cb2.Back());
     ASSERT_EQ(cb1.GetCapacity(), cb2.GetCapacity());
     ASSERT_EQ(cb1.GetCapacity(), cap);
     ASSERT_EQ(cb1.GetSize(), cb2.GetSize());
@@ -33,8 +31,7 @@ TEST(CircularBuffer, creating_with_capacity)
     for (int i = 0; i < cap; i++) {
         ASSERT_EQ(cb[i], elem);
     }
-    ASSERT_EQ(cb.GetHead(), 0);
-    ASSERT_EQ(cb.GetTail(), 0);
+
     ASSERT_EQ(cb.GetCapacity(), cap);
     ASSERT_EQ(cb.GetSize(), 0);
 }
@@ -49,8 +46,7 @@ TEST(CircularBuffer, creating_with_capacity_and_filling)
     for (int i = 0; i < cap; i++) {
         ASSERT_EQ(cb[i], elem);
     }
-    ASSERT_EQ(cb.GetHead(), 0);
-    ASSERT_EQ(cb.GetTail(), 0);
+    
     ASSERT_EQ(cb.GetCapacity(), cap);
     ASSERT_EQ(cb.GetSize(), cap);
 }
@@ -93,10 +89,8 @@ TEST(CircularBuffer, operator_assignment_for_different_cbs)
     for (int i = 0; i < cb1.GetCapacity(); i++) {
         ASSERT_EQ(cb1[i], cb2[i]);
     }
-    ASSERT_EQ(cb1.GetHead(), cb2.GetHead());
-    ASSERT_EQ(cb1.GetHead(), 0);
-    ASSERT_EQ(cb1.GetTail(), cb2.GetTail());
-    ASSERT_EQ(cb1.GetTail(), 0);
+    ASSERT_EQ(cb1.Front(), cb2.Front());
+    ASSERT_EQ(cb1.Back(), cb2.Back());
     ASSERT_EQ(cb1.GetCapacity(), cb2.GetCapacity());
     ASSERT_EQ(cb1.GetCapacity(), cap);
     ASSERT_EQ(cb1.GetSize(), cb2.GetSize());
@@ -130,8 +124,10 @@ TEST(CircularBuffer, setter_capacity_less)
     int cap = 5;
 
     CircularBuffer cb(cap);
-    cb.SetHead(2);
-    cb.SetTail(2);
+    cb.PushBack();
+    cb.PushBack();
+    cb.PopFront();
+    cb.PopFront();
     for (int i = 0; i < 2; i++) {
         cb.PushBack('A' + i);
     }
@@ -151,8 +147,10 @@ TEST(CircularBuffer, setter_capacity_less_and_size_less)
     int cap = 5;
 
     CircularBuffer cb(cap);
-    cb.SetHead(2);
-    cb.SetTail(2);
+    cb.PushBack();
+    cb.PushBack();
+    cb.PopFront();
+    cb.PopFront();
     for (int i = 0; i < 3; i++) {
         cb.PushBack('A' + i);
     }
@@ -172,8 +170,14 @@ TEST(CircularBuffer, setter_capacity_more)
     int cap = 5;
 
     CircularBuffer cb(cap);
-    cb.SetHead(4);
-    cb.SetTail(4);
+    cb.PushBack();
+    cb.PushBack();
+    cb.PushBack();
+    cb.PushBack();
+    cb.PopFront();
+    cb.PopFront();
+    cb.PopFront();
+    cb.PopFront();
     for (int i = 0; i < 3; i++) {
         cb.PushBack('A' + i);
     }
@@ -192,37 +196,29 @@ TEST(CircularBuffer, setter_capacity_more)
 TEST(CircularBuffer, push_back)
 {
     int cap = 5;
-    value_type elem1 = '1';
-    value_type elem2 = '5';
 
     CircularBuffer cb(cap);
-    cb.SetHead(cap - 1);
-    cb.SetTail(cap - 1);
-    cb.PushBack(elem1);
-    cb.PushBack(elem2);
+    for (int i = 0; i < cap + 1; i++) {
+        cb.PushBack('1' + i);
+    }
 
-    ASSERT_EQ(cb.at(-1), elem1);
-    ASSERT_EQ(cb[0], elem2);
-    ASSERT_EQ(cb.GetTail(), 1);
-    ASSERT_EQ(cb.GetSize(), 2);
+    ASSERT_EQ(cb.at(-1), '5');
+    ASSERT_EQ(cb[0], '6');
+    ASSERT_EQ(cb.GetSize(), cap);
 }
 
 TEST(CircularBuffer, push_front)
 {
     int cap = 5;
-    value_type elem1 = '1';
-    value_type elem2 = '5';
 
     CircularBuffer cb(cap);
-    cb.SetHead(1);
-    cb.SetTail(1);
-    cb.PushFront(elem1);
-    cb.PushFront(elem2);
+    for (int i = 0; i < cap + 1; i++) {
+        cb.PushFront('1' + i);
+    }
 
-    ASSERT_EQ(cb[0], elem1);
-    ASSERT_EQ(cb.at(-1), elem2);
-    ASSERT_EQ(cb.GetHead(), cap - 1);
-    ASSERT_EQ(cb.GetSize(), 2);
+    ASSERT_EQ(cb[0], '5');
+    ASSERT_EQ(cb.at(-1), '6');
+    ASSERT_EQ(cb.GetSize(), cap);
 }
 
 TEST(CircularBuffer, pop_back)
@@ -238,8 +234,6 @@ TEST(CircularBuffer, pop_back)
 
     ASSERT_EQ(cb[0], value_type());
     ASSERT_EQ(cb.at(-1), elem2);
-    ASSERT_EQ(cb.GetHead(), cap - 1);
-    ASSERT_EQ(cb.GetTail(), 0);
     ASSERT_EQ(cb.GetSize(), 1);
 }
 
@@ -256,8 +250,6 @@ TEST(CircularBuffer, pop_front)
 
     ASSERT_EQ(cb[0], elem1);
     ASSERT_EQ(cb.at(-1), value_type());
-    ASSERT_EQ(cb.GetHead(), 0);
-    ASSERT_EQ(cb.GetTail(), 1);
     ASSERT_EQ(cb.GetSize(), 1);
 }
 
@@ -266,8 +258,10 @@ TEST(CircularBuffer, linearize)
     int cap = 5;
 
     CircularBuffer cb(cap);
-    cb.SetHead(cap - 1);
-    cb.SetTail(cap - 1);
+    for (int i = 0; i < 4; i++) {
+        cb.PushBack();
+        cb.PopFront();
+    }
     for (int i = 0; i < 3; i++) {
         cb.PushBack('A' + i);
     }
@@ -306,8 +300,10 @@ TEST(CircularBuffer, resize_smaller)
     value_type item = '5';
 
     CircularBuffer cb(cap);
-    cb.SetHead(2);
-    cb.SetTail(2);
+    for (int i = 0; i < 2; i++) {
+        cb.PushBack();
+        cb.PopFront();
+    }
     for (int i = 0; i < cap; i++) {
         cb.PushBack('A' + i);
     }
@@ -358,8 +354,8 @@ TEST(CircularBuffer, swap_correct)
         cb1.PushBack('A' + i);
     }
     CircularBuffer cb2(cap);
-    cb2.SetHead(1);
-    cb2.SetTail(1);
+    cb2.PushBack();
+    cb2.PopFront();
     for (int i = 0; i < cap - 1; i++) {
         cb2.PushBack('0' + i);
     }
@@ -371,10 +367,6 @@ TEST(CircularBuffer, swap_correct)
     ASSERT_EQ(cb2[1], 'B');
     ASSERT_EQ(cb1[2], '1');
     ASSERT_EQ(cb2[2], 'C');
-    ASSERT_EQ(cb1.GetHead(), 1);
-    ASSERT_EQ(cb2.GetHead(), 0);
-    ASSERT_EQ(cb1.GetTail(), 0);
-    ASSERT_EQ(cb2.GetTail(), 0);
     ASSERT_EQ(cb1.GetSize(), 2);
     ASSERT_EQ(cb2.GetSize(), 3);
 }

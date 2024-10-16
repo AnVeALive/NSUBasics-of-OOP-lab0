@@ -96,14 +96,6 @@ CircularBuffer &CircularBuffer::operator=(const CircularBuffer &cb)
 
 
 // Geters
-int CircularBuffer::GetHead() const {
-    return head;
-}
-
-int CircularBuffer::GetTail() const {
-    return tail;
-}
-
 int CircularBuffer::GetCapacity() const {
     return capacity;
 }
@@ -135,18 +127,6 @@ const value_type &CircularBuffer::Back() const {
 
 
 //Seters
-void CircularBuffer::SetHead(int ind) {
-    if (ind < 0 || ind >= capacity)
-        throw std::out_of_range("Head cannot be there.");
-    head = ind;
-}
-
-void CircularBuffer::SetTail(int ind) {
-    if (ind < 0 || ind >= capacity)
-        throw std::out_of_range("Tail cannot be there.");
-    tail = ind;
-}
-
 void CircularBuffer::SetCapacity(int new_capacity)
 {
     if (new_capacity != capacity)
@@ -165,12 +145,6 @@ void CircularBuffer::SetCapacity(int new_capacity)
         delete[] buffer;
         this->buffer = new_buffer;
     }
-}
-
-void CircularBuffer::SetSize(int new_size) {
-    if (new_size > capacity)
-        throw std::out_of_range("Size cannot be larger than capacity.");
-    size = new_size;
 }
 
 
@@ -313,16 +287,16 @@ void CircularBuffer::Swap(CircularBuffer &cb)
         }
         int temp;
 
-        temp = cb.GetHead();
-        cb.SetHead(head);
+        temp = cb.head;
+        cb.head = head;
         head = temp;
 
-        temp = cb.GetTail();
-        cb.SetTail(tail);
+        temp = cb.tail;
+        cb.tail = tail;
         tail = temp;
 
-        temp = cb.GetSize();
-        cb.SetSize(size);
+        temp = cb.size;
+        cb.size = size;
         size = temp;
     }
 }
@@ -350,9 +324,7 @@ void CircularBuffer::Clear()
 
 bool operator==(const CircularBuffer &first, const CircularBuffer &second)
 {
-    if (first.GetHead() == second.GetHead() &&
-        first.GetTail() == second.GetTail() &&
-        first.GetCapacity() == second.GetCapacity() &&
+    if (first.GetCapacity() == second.GetCapacity() &&
         first.GetSize() == second.GetSize())
     {
         for (int i = 0; i < first.GetCapacity(); i++) {
@@ -366,9 +338,7 @@ bool operator==(const CircularBuffer &first, const CircularBuffer &second)
 
 bool operator!=(const CircularBuffer &first, const CircularBuffer &second)
 {
-    if (first.GetHead() == second.GetHead() &&
-        first.GetTail() == second.GetTail() &&
-        first.GetCapacity() == second.GetCapacity() &&
+    if (first.GetCapacity() == second.GetCapacity() &&
         first.GetSize() == second.GetSize())
     {
         for (int i = 0; i < first.GetCapacity(); i++) {
