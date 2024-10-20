@@ -141,6 +141,8 @@ public:
 
         fout << "#S H" << _grid.getHeight() << "/";
         fout << "W" << _grid.getWidth() << std::endl;
+
+        fout.close();
     }
 
     void tick(int n = 1) {
@@ -205,7 +207,7 @@ int main(int argc, char *argv[]) {
 
     std::string cmd;
     while (true) {
-        std::cin >> cmd;
+        getline(std::cin, cmd);
 
         if (cmd == "exit") {
             return 0;
