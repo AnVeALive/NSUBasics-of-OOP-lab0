@@ -3,3 +3,4 @@
 *.dSYM*
 .vscode
 cmake-build-debug
+build
