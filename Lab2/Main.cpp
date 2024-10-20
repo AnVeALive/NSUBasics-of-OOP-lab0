@@ -37,6 +37,14 @@ public:
         _cells(height, std::vector<Cell>(width)) {
     }
 
+    int getHeight() const {
+        return _height;
+    }
+
+    int getWidth() const {
+        return _width;
+    }
+
     int countNeighbors(int y, int x) {
         int count = 0;
         int ny, nx;
@@ -54,6 +62,10 @@ public:
         return count;
     }
 
+    bool isAlive(const int y, const int x) {
+        return _cells[y][x].isAlive();
+    }
+
     void setAlive(int y, int x, bool alive) {
         _cells[y][x].setAlive(alive);
     }
@@ -65,6 +77,7 @@ public:
             }
             std::cout << std::endl;
         }
+        std::cout << std::endl;
     }
 };
 
@@ -109,12 +122,37 @@ public:
         fin.close();
     }
 
-    void saveToFile(const std::string &file) {
+    void saveToFile(const std::string &filename) {
+        std::ofstream fout(filename);
 
+        if (!fout.is_open()) {
+            throw std::ios_base::failure("The file could not be opened: " + filename);
+        }
+
+        fout << "#Life 1.06" << std::endl << "#R B";
+        for (int elem : _birth) {
+            fout << (char)(elem + '0');
+        }
+        fout << "/S";
+        for (int elem : _survival) {
+            fout << (char)(elem + '0');
+        }
+        fout << std::endl;
+
+        fout << "#S H" << _grid.getHeight() << "/";
+        fout << "W" << _grid.getWidth() << std::endl;
     }
 
     void tick(int n = 1) {
         
+    }
+
+    void showHelp() const {
+        std::cout <<std::endl << "+-----+ Справка о командах +-----+" << std::endl;
+        std::cout << "dump <filename> - сохранить вселенную в файл." << std::endl;
+        std::cout << "tick <n> - расчитать n-ое поколение." << std::endl;
+        std::cout << "exit - выход из игры." << std::endl;
+        std::cout << "help - справка о командах" << std::endl << std::endl;
     }
 
     void setRules(const std::string &ruleLine) {
@@ -152,10 +190,6 @@ public:
         _grid = Grid(height, width);
     }
 
-    void help() {
-
-    }
-
     void printGrid() {
         _grid.print();
     }
@@ -167,8 +201,21 @@ int main(int argc, char *argv[]) {
     if (argc > 1) {
         game.loadFromFile(argv[1]);
     }
-
     game.printGrid();
+
+    std::string cmd;
+    while (true) {
+        std::cin >> cmd;
+
+        if (cmd == "exit") {
+            return 0;
+        } else if (cmd == "help") {
+            game.showHelp();
+        } else if (cmd.rfind("dump", 0) == 0) {
+            std::string filename = cmd.substr(5);
+            game.saveToFile(filename);
+        }
+    }
 
     return 0;
 }
