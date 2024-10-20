@@ -84,59 +84,29 @@ public:
         _grid.setAlive(MID_HEIGHT + 1, MID_WIDTH + 1, true);
     }
 
-    Game(const std::string &file) : _iteration(0) {
-        std::ifstream fin(file);
+    void loadFromFile(const std::string &filename) {
+        std::ifstream fin(filename);
 
         if (!fin.is_open()) {
-            throw std::ios_base::failure("The file could not be opened: " + file);
+            throw std::ios_base::failure("The file could not be opened: " + filename);
         }
+
+        _iteration = 0;
 
         std::string line;
         while (!fin.eof()) {
             getline(fin, line);
 
             if (line[1] == 'R') {
-                int b = line.find('B');
-                int s = line.find('S');
-
-                int i = 1;
-                while (line[b + i] != '/') {
-                    _birth.insert(line[b + i] - '0');
-                    i++;
-                }
-                i = 1;
-                while (line[s + i] != '\n' && s + i < line.size()) {
-                    _survival.insert(line[s + i] - '0');
-                    i++;
-                }
+                setRules(line);
             }
 
             if (line[1] == 'S') {
-                int h = line.find('H');
-                int w = line.find('W');
-
-                int height = 0;
-                int width = 0;
-                int i = 1;
-                while (line[h + i] != '/') {
-                    height = height * 10 + (line[h + i] - '0');
-                    i++;
-                }
-                i = 1;
-                while (line[w + i] != '\n' && w + i < line.size()) {
-                    width = width * 10 + (line[w + i] - '0');
-                    i++;
-                }
-
-                _grid = Grid(height, width);
+                setGridSize(line);
             }
 
         }
         fin.close();
-    }
-
-    void loadFromFile(const std::string &file) {
-
     }
 
     void saveToFile(const std::string &file) {
@@ -147,23 +117,39 @@ public:
         
     }
 
-    void setRules(const std::string &rules) {
-        _birth.clear();
-        _survival.clear();
+    void setRules(const std::string &ruleLine) {
+        int b = ruleLine.find('B');
+        int s = ruleLine.find('S');
 
-        int b = rules.find('B');
-        int s = rules.find('S');
-
-        int i = 0;
-        while (rules[b + i] != '/') {
-            _birth.insert(rules[b + i] - '0');
+        int i = 1;
+        while (ruleLine[b + i] != '/') {
+            _birth.insert(ruleLine[b + i] - '0');
             i++;
         }
-        i = 0;
-        while (rules[s + i] != '\n' && s + i < rules.size()) {
-            _survival.insert(rules[s + i]);
+        i = 1;
+        while (ruleLine[s + i] != '\n' && s + i < ruleLine.size()) {
+            _survival.insert(ruleLine[s + i] - '0');
             i++;
         }
+    }
+
+    void setGridSize(const std::string &sizeLine) {
+        int h = sizeLine.find('H');
+        int w = sizeLine.find('W');
+
+        int height = 0;
+        int width = 0;
+        int i = 1;
+        while (sizeLine[h + i] != '/') {
+            height = height * 10 + (sizeLine[h + i] - '0');
+            i++;
+        }
+        i = 1;
+        while (sizeLine[w + i] != '\n' && w + i < sizeLine.size()) {
+            width = width * 10 + (sizeLine[w + i] - '0');
+            i++;
+        }
+        _grid = Grid(height, width);
     }
 
     void help() {
