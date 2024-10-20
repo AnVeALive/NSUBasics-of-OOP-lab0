@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/Users/anvea/Documents/NSU/OOP/Lab2/build",
+  "command": "/usr/bin/clang++   -g -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.0.sdk -o CMakeFiles/Lab2.dir/Main.cpp.o -c /Users/anvea/Documents/NSU/OOP/Lab2/Main.cpp",
+  "file": "/Users/anvea/Documents/NSU/OOP/Lab2/Main.cpp",
+  "output": "CMakeFiles/Lab2.dir/Main.cpp.o"
+}
+]
