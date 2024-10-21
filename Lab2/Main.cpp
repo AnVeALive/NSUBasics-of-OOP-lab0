@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <vector>
 #include <set>
 
@@ -11,16 +12,25 @@ const int WIDTH      = 50;
 class Cell {
 private:
     bool _alive;
+    bool _change;
 
 public:
-    Cell() : _alive(false) {}
+    Cell() : _alive(false), _change(false) {}
 
     bool isAlive() {
         return _alive;
     }
 
+    bool isChange() {
+        return _change;
+    }
+
     void setAlive(const bool alive) {
         _alive = alive;
+    }
+
+    void setChange(const bool change) {
+        _change = change;
     }
 };
 
@@ -69,11 +79,19 @@ public:
     void setAlive(int y, int x, bool alive) {
         _cells[y][x].setAlive(alive);
     }
+
+    bool isChange(const int y, const int x) {
+        return _cells[y][x].isChange();
+    }
+
+    void setChange(int y, int x, bool change) {
+        _cells[y][x].setChange(change);
+    }
     
     void print() {
         for (int i = 0; i < _height; i++) {
             for (int j = 0; j < _width; j++) {
-                std::cout << ((_cells[i][j].isAlive()) ? '*' : '.');
+                std::cout << ((_cells[i][j].isAlive()) ? 'o' : ' ');
             }
             std::cout << std::endl;
         }
@@ -142,15 +160,46 @@ public:
         fout << "#S H" << _grid.getHeight() << "/";
         fout << "W" << _grid.getWidth() << std::endl;
 
+        std::cout << "The universe was successfully saved.\n" << std::endl;
         fout.close();
     }
 
-    void tick(int n = 1) {
-        
+    void tick(const int n) {
+        for (int i = 0; i < n; i++) {
+            _iteration++;
+            for (int y = 0; y < _grid.getHeight(); y++) {
+                for (int x = 0; x < _grid.getWidth(); x++) {
+                    if (_grid.isAlive(y, x)) {
+                        if (_survival.find(_grid.countNeighbors(y, x)) == 
+                            _survival.end()) {
+                            _grid.setChange(y, x, true);
+                        }
+                    } else {
+                        if (_birth.find(_grid.countNeighbors(y, x)) !=
+                            _birth.end()) {
+                            _grid.setChange(y, x, true);
+                        }
+                    }
+                }
+            }
+            for (int y = 0; y < _grid.getHeight(); y++) {
+                for (int x = 0; x < _grid.getWidth(); x++) {
+                    if (_grid.isChange(y, x)) {
+                        if (_grid.isAlive(y, x)) {
+                            _grid.setAlive(y, x, false);
+                        } else {
+                            _grid.setAlive(y, x, true);
+                        }
+                        _grid.setChange(y, x, false);
+                    }
+                }
+            }
+        }
+        printGrid(); 
     }
 
     void showHelp() const {
-        std::cout <<std::endl << "+-----+ Справка о командах +-----+" << std::endl;
+        std::cout << "+-----+ Справка о командах +-----+" << std::endl;
         std::cout << "dump <filename> - сохранить вселенную в файл." << std::endl;
         std::cout << "tick <n> - расчитать n-ое поколение." << std::endl;
         std::cout << "exit - выход из игры." << std::endl;
@@ -216,6 +265,11 @@ int main(int argc, char *argv[]) {
         } else if (cmd.rfind("dump", 0) == 0) {
             std::string filename = cmd.substr(5);
             game.saveToFile(filename);
+        } else if (cmd.rfind("tick", 0) == 0) {
+            int iteration = 1;
+            std::ifstream inss(cmd.substr(cmd.find(' ') + 1));
+            inss >> iteration;
+            game.tick(iteration);
         }
     }
 
