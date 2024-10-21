@@ -5,10 +5,8 @@
 int main(int argc, char *argv[]) {
     Game game;
 
-    if (argc > 1) {
-        if (argv[1][0] != '-') {
-            game.loadFromFile(argv[1]);
-        }
+    if (argc > 1 && argv[1][0] != '-') {
+        game.loadFromFile(argv[1]);
     }
 
     std::string arg;
