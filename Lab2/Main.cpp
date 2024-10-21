@@ -5,12 +5,15 @@
 int main(int argc, char *argv[]) {
     Game game;
 
-    if (argv[1][0] != '-') {
-        game.loadFromFile(argv[1]);
+    if (argc > 1) {
+        if (argv[1][0] != '-') {
+            game.loadFromFile(argv[1]);
+        }
     }
 
+    std::string arg;
     for (int i = 1; i < argc; i++) {
-        std::string arg = argv[i];
+        arg = argv[i];
 
         if (arg == "-i") {
             game.tick(std::stoi(argv[i + 1]));
@@ -20,8 +23,10 @@ int main(int argc, char *argv[]) {
 
         if (arg == "-o") {
             game.saveToFile((std::string)argv[i + 1]);
+            return 0;
         } else if (arg.rfind("--output=", 0) == 0) {
             game.saveToFile(arg.substr(arg.find('=') + 1));
+            return 0;
         }
     }
 

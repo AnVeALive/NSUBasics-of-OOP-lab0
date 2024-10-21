@@ -23,12 +23,33 @@ void Game::loadFromFile(const std::string &filename) {
 
         if (line[1] == 'R') {
             setRules(line);
-        }
-
-        if (line[1] == 'S') {
+        } else if (line[1] == 'S') {
             setGridSize(line);
+            break;
+        }
+    }
+    while (!fin.eof()) {
+        getline(fin, line);
+
+        if (line == "") {
+            break;
         }
 
+        int x = 0;
+        int y = 0;
+
+        // Не исключаются ошибки
+        int i = 0;
+        while (line[i] != ' ') {
+            x = x * 10 + (line[i] - '0');
+            i++;
+        }
+        i++;
+        while (i < line.size()) {
+            y = y * 10 + (line[i] - '0');
+            i++;
+        }
+        _grid.setAlive(_grid.getHeight() - y, x - 1, true);
     }
     fin.close();
 }
