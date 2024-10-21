@@ -53,6 +53,14 @@ void Game::saveToFile(const std::string &filename) {
     fout << "#S H" << _grid.getHeight() << "/";
     fout << "W" << _grid.getWidth() << std::endl;
 
+    for (int y = 0; y < _grid.getHeight(); y++) {
+        for (int x = 0; x < _grid.getWidth(); x++) {
+            if (_grid.isAlive(y, x)) {
+                fout << (x + 1) << ' ' << (_grid.getHeight() - y) << std::endl;
+            }
+        }
+    }
+
     std::cout << "The universe was successfully saved.\n" << std::endl;
     fout.close();
 }
@@ -88,13 +96,12 @@ void Game::tick(const int n) {
             }
         }
     }
-    printGrid();
 }
 
 void Game::showHelp() const {
     std::cout << "+-----+ Справка о командах +-----+" << std::endl;
     std::cout << "dump <filename> - сохранить вселенную в файл." << std::endl;
-    std::cout << "tick <n> - расчитать n-ое поколение." << std::endl;
+    std::cout << "tick <n> - расчитать n итераций." << std::endl;
     std::cout << "exit - выход из игры." << std::endl;
     std::cout << "help - справка о командах" << std::endl << std::endl;
 }
