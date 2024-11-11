@@ -1,0 +1,1 @@
+add_library(WavHandler WavHandler.cpp WavHandler.h)
