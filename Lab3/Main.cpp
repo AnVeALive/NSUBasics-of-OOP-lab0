@@ -9,18 +9,18 @@ using namespace std;
 
 
 int main(int argc, char *argv[]) {
-
-    if (argc < 5) {
-        cerr << "There are too few arguments" << endl;
-        return 1;
-    } 
-
-    if (string(argv[1]) == "-h") {
+    
+    if (argc == 2 && string(argv[1]) == "-h") {
         cout << "Sound Processor Usage:" << endl;
         cout << "\t-c <config.txt> <output.wav> <input1.wav> [<input2.wav> ...]" << endl;
         cout << "Supported converters:\nmute,\nmix,\nreverse" << endl;
         return 0;
     }
+    
+    if (argc < 5) {
+        cerr << "There are too few arguments" << endl;
+        return 1;
+    } 
     
     string configFileName(argv[2]);
     string outputFileName(argv[3]);

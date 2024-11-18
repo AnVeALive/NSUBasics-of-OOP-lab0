@@ -37,9 +37,18 @@ void WavHandler::skipToData(ifstream &fin) {
     }
 }
 
-void WavHandler::getNextSamples(vector<int16_t> &samples, vector<ifstream> &inputFiles) {
+// ! <int16_t*>
+void WavHandler::getNextSamples(vector<int16_t*> &samples, vector<ifstream> &inputFiles) {
     for (int i = 0; i < samples.size(); i++) {
-        inputFiles[i].read(reinterpret_cast<char*>(&samples[i]), sizeof(int16_t));
+        int16_t sample;
+        if (!inputFiles[i].read(reinterpret_cast<char*>(&sample), sizeof(int16_t))) {
+            if (inputFiles[i].eof() && samples[i] != nullptr) {
+                delete samples[i];
+                samples[i] = nullptr;
+            }
+        } else {
+            *samples[i] = sample;
+        }
     }
 }
 

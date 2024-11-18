@@ -6,17 +6,6 @@
 
 
 
-bool SoundProcessor::isNeedToApplyConverter(const Cmd &cmd, const int numSample) {
-    if (cmd.name == "mute" && cmd.args[0] * SAMPLE_RATE < numSample &&
-    numSample <= cmd.args[1] * SAMPLE_RATE) {
-        return true;
-    } else if (cmd.name == "mix" && cmd.args[1] * SAMPLE_RATE < numSample) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
 void SoundProcessor::process(const string &configFileName, const string &outputFileName, const vector<string> &inputFileNames) {
     // Создание конфига.
     ConfigParser cp;
@@ -58,16 +47,23 @@ void SoundProcessor::process(const string &configFileName, const string &outputF
 
     // Считывание по одному сэмплу из каждого файла и
     // запись результата в выходной файл.
-    vector<int16_t> samples(inputFileNames.size());
+    vector<int16_t*> samples(inputFileNames.size());
+    for (int i = 0; i < inputFileNames.size(); i++) {
+        samples[i] = new int16_t(0);
+    }
     for (int i = 1; i <= dataSize; i++) {
         wh.getNextSamples(samples, inputFiles);
 
         for (int indCmd = 0; indCmd < config.getSize(); indCmd++) {
-            if (isNeedToApplyConverter(config.getCmd(indCmd), i)) {
+            if (converters[indCmd]->isApplicable(i)) {
                 converters[indCmd]->apply(samples);
             }
         }
-        wh.write(fout, samples[0]);
+        wh.write(fout, *samples[0]);
+    }
+
+    for (int i = 0; i < inputFileNames.size(); i++) {
+        delete samples[i];
     }
 
     // Clearning vector of converters
