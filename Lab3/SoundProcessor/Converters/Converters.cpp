@@ -4,12 +4,6 @@
 
 Converter::~Converter() {}
 
-void Converter::apply(std::vector<int16_t*> &samples) {}
-
-bool Converter::isApplicable(const int numSample) {
-    return true;
-}
-
 
 
 Mute::Mute(const int begin, const int end) : _begin(begin), _end(end) {}

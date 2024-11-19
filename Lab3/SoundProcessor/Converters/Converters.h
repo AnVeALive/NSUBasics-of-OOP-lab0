@@ -13,7 +13,7 @@ class Converter {
 public:
     virtual ~Converter();
     virtual void apply(std::vector<int16_t*> &samples) = 0;
-    virtual bool isApplicable(const int numSample);
+    virtual bool isApplicable(const int numSample) = 0;
 };
 
 
