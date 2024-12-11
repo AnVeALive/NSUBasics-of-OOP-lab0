@@ -5,6 +5,8 @@
 #include <tuple>
 #include <vector>
 
+#define TemplateType int, std::string, float, bool
+
 
 
 template <typename Tuple, unsigned N, unsigned Size>
@@ -41,13 +43,30 @@ std::ostream& operator<<(std::ostream& os, const std::tuple<Args...>& tuple) {
 
 
 
+template <typename T>
+struct TypeHandler {
+    static void process(T& value, const std::string& string) {
+        std::istringstream is(string);
+        is >> value;
+    }
+};
+
+template <>
+struct TypeHandler<std::string> {
+    static void process(std::string& value, const std::string& string) {
+        value = string;
+    }
+};
+
+
+
 template <typename Tuple, typename Vector, unsigned N, unsigned Size>
 struct TuplePlaceholder {
     static void add(Tuple& tuple, const Vector& vector) {
-        std::tuple_element_t<N, Tuple> res;
+        using ElementType = typename std::tuple_element<N, Tuple>::type;
+        ElementType res;
 
-        std::istringstream is(vector[N]);
-        is >> res;
+        TypeHandler<ElementType>::process(res, vector[N]);
         std::get<N>(tuple) = res;
         TuplePlaceholder<Tuple, Vector, N + 1, Size>::add(tuple, vector);
     }
@@ -56,10 +75,10 @@ struct TuplePlaceholder {
 template <typename Tuple, typename Vector, unsigned N>
 struct TuplePlaceholder<Tuple, Vector, N, N> {
     static void add(Tuple& tuple, const Vector& vector) {
-        std::tuple_element_t<N, Tuple> res;
+        using ElementType = typename std::tuple_element<N, Tuple>::type;
+        ElementType res;
 
-        std::istringstream is(vector[N]);
-        is >> res;
+        TypeHandler<ElementType>::process(res, vector[N]);
         std::get<N>(tuple) = res;
     }
 };
@@ -102,6 +121,8 @@ public:
             if (_input && !_input->eof()) {
                 std::string line;
                 if (std::getline(*_input, line, _row_delim)) {
+                    ++_cur_row;
+                    _cur_col = 0;
                     parseLine(line);
                 }
                 else {
@@ -121,6 +142,7 @@ public:
             std::vector<std::string> vec;
             std::string substring;
             while (getline(is, substring, _col_delim)) {
+                ++_cur_col;
                 vec.push_back(substring);
             }
             TuplePlaceholder<TupleType, std::vector<std::string>, 0, sizeof...(Args) - 1>::add(_cur_tuple, vec);
@@ -143,7 +165,6 @@ public:
         return Iterator();
     }
 
-
 private:
     std::istream& _input;
     char _row_delim;
@@ -164,15 +185,11 @@ int main(int argc, char* argv[]) {
     }
 
     try {
-        CsvParser<int, std::string> parser(file, 0);
-        // std::tuple<int, std::string, int> parsed_str(42, "Hello", 53);
-        // std::cout << parsed_str << std::endl;
-        for (std::tuple<int, std::string> rs : parser) {
+        CsvParser<TemplateType> parser(file, 0);
+        for (std::tuple<TemplateType> rs : parser) {
             std::cout.put('(');
             std::cout << rs << ')' << std::endl;
         }
-        // std::tuple<int, std::string> t = {3, "Lisa Simpson"};
-        // std::cout << t << std::endl;
     } catch (const std::exception& ex) {
         std::cerr << "Error: " << ex.what() << std::endl;
         return 1;
