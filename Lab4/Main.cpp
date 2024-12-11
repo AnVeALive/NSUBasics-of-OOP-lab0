@@ -5,10 +5,11 @@
 #include <tuple>
 #include <vector>
 
-#define TemplateType int, std::string, float, bool
+#define TableTemplate int, std::string, float, char
 
 
 
+//===========+ TuplePrinter +===========+//
 template <typename Tuple, unsigned N, unsigned Size>
 struct TuplePrinter {
     static void print(std::ostream& os, const Tuple& tuple) {
@@ -43,6 +44,7 @@ std::ostream& operator<<(std::ostream& os, const std::tuple<Args...>& tuple) {
 
 
 
+//===========+ TypeHandler +===========+//
 template <typename T>
 struct TypeHandler {
     static void process(T& value, const std::string& string) {
@@ -60,6 +62,7 @@ struct TypeHandler<std::string> {
 
 
 
+//===========+ TuplePlaceholder +===========+//
 template <typename Tuple, typename Vector, unsigned N, unsigned Size>
 struct TuplePlaceholder {
     static void add(Tuple& tuple, const Vector& vector) {
@@ -90,6 +93,7 @@ struct TuplePlaceholder<Tuple, Vector, N, 0> {
 
 
 
+//===========+ CsvParser +===========+//
 template <typename... Args>
 class CsvParser {
     using TupleType = std::tuple<Args...>;
@@ -132,29 +136,52 @@ public:
             return *this;
         }
 
-        bool operator!=(const Iterator& other) {
-            return _input != other._input;
+        bool operator!=(const Iterator& iterator) {
+            return _input != iterator._input;
         }
 
     private:
         void parseLine(const std::string& line) {
-            std::istringstream is(line);
-            std::vector<std::string> vec;
-            std::string substring;
-            while (getline(is, substring, _col_delim)) {
-                ++_cur_col;
-                vec.push_back(substring);
+            std::vector<std::string> columns_per_row;
+            std::istringstream       is(line);
+            std::string              col;
+
+            bool escape_flag = false;
+            std::size_t size_line = line.size();
+            for (int i = 0; i < size_line; ++i) {
+                if (line[i] == _col_delim && !escape_flag) {
+                    ++_cur_col;
+                    columns_per_row.push_back(col);
+                    col.clear();
+                }
+                else if (line[i] == _escape_symbol) {
+                    if (i != size_line - 1 && line[i + 1] == _escape_symbol) {
+                        ++i;
+                        col += _escape_symbol;
+                    }
+                    else if (!escape_flag) {
+                        escape_flag = true;
+                    }
+                    else if (escape_flag) {
+                        escape_flag = false;
+                    }
+                }
+                else {
+                    col += line[i];
+                }
             }
-            TuplePlaceholder<TupleType, std::vector<std::string>, 0, sizeof...(Args) - 1>::add(_cur_tuple, vec);
+            columns_per_row.push_back(col);
+
+            TuplePlaceholder<TupleType, std::vector<std::string>, 0, sizeof...(Args) - 1>::add(_cur_tuple, columns_per_row);
         }
 
         std::istream* _input;
-        TupleType _cur_tuple;
-        char _row_delim;
-        char _col_delim;
-        char _escape_symbol;
-        std::size_t _cur_row = 0;
-        std::size_t _cur_col = 0;
+        char          _col_delim;
+        char          _escape_symbol;
+        char          _row_delim;
+        std::size_t   _cur_row = 0;
+        std::size_t   _cur_col = 0;
+        TupleType     _cur_tuple;
     };
 
     Iterator begin() {
@@ -167,9 +194,9 @@ public:
 
 private:
     std::istream& _input;
-    char _row_delim;
-    char _col_delim;
-    char _escape_symbol;
+    char          _row_delim;
+    char          _col_delim;
+    char          _escape_symbol;
 };
 
 int main(int argc, char* argv[]) {
@@ -185,10 +212,9 @@ int main(int argc, char* argv[]) {
     }
 
     try {
-        CsvParser<TemplateType> parser(file, 0);
-        for (std::tuple<TemplateType> rs : parser) {
-            std::cout.put('(');
-            std::cout << rs << ')' << std::endl;
+        CsvParser<TableTemplate> parser(file, 0);
+        for (std::tuple<TableTemplate> rs : parser) {
+            std::cout << '(' << rs << ')' << std::endl;
         }
     } catch (const std::exception& ex) {
         std::cerr << "Error: " << ex.what() << std::endl;
